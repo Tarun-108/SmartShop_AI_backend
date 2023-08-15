@@ -2,18 +2,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 require("dotenv").config();
 const app = express();
+const cors = require("cors");
 const mongoose = require('mongoose');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const cors = require("cors")
-
-
 const authRoutes = require('./routes/auth')
 const userProfileRoutes = require('./routes/userProfile')
 const cookieParser = require('cookie-parser')
+const chalk = require("chalk");
 
 //middlewares
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors());
 
 // Server Live
 const port = process.env.LOCALPORT || 5000
@@ -32,6 +32,12 @@ mongoose.connect(process.env.DB_URI)
 
 
 //routes
+app.use('*', (req, res, next) => {
+    console.log(chalk.red(req.method), chalk.blue(req.baseUrl));
+    next();
+})
+
+
 app.use(authRoutes)
 app.use(userProfileRoutes)
 

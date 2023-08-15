@@ -53,7 +53,6 @@ module.exports.register_post = async (req, res) => {
         const auth = await Auth.create({email, password});
         const token = createToke(auth._id, auth.email);
         req.body.authId = auth._id;
-        console.log(req);
         const user = await userDataShared.createUser(req);
         res.status(201).json({data: {
                 token: token,
