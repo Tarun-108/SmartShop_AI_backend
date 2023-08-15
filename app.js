@@ -3,13 +3,14 @@ const bodyParser = require('body-parser');
 require("dotenv").config();
 const app = express();
 const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser')
 const cors = require('cors')
 
 
+const chatRoutes = require('./routes/chat')
 const authRoutes = require('./routes/auth')
 const userProfileRoutes = require('./routes/userProfile')
-const chatRoutes = require('./routes/chat')
+const cookieParser = require('cookie-parser')
+const chalk = require("chalk");
 
 //middlewares
 app.use(bodyParser.json());
@@ -33,6 +34,12 @@ mongoose.connect(process.env.DB_URI)
 
 
 //routes
+app.use('*', (req, res, next) => {
+    console.log(chalk.red(req.method), chalk.blue(req.baseUrl));
+    next();
+})
+
+
 app.use(authRoutes)
 app.use(userProfileRoutes)
 app.use(chatRoutes)
