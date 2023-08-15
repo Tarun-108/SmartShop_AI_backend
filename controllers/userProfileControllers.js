@@ -59,7 +59,7 @@ module.exports.getUser_post = async (req, res) => {
 
     try{
         const response = await User.getUser(email);
-        res.status(201).json(response);
+        res.status(200).json(response);
     }catch (err) {
         const errors = handleErrors(err);
         res.status(400).json({errors: errors});

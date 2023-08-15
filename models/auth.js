@@ -18,10 +18,10 @@ const authSchema = new mongoose.Schema({
 });
 
 //fxn call after new doc saved in DB
-authSchema.post('save', function(doc, next){
-    console.log('New user is created and saved', doc);
-    next();
-})
+// authSchema.post('save', function(doc, next){
+//     console.log('New user is created and saved', doc);
+//     next();
+// })
 
 // fxn call before new doc is saved in DB
 authSchema.pre('save', async function ( next){
@@ -34,7 +34,7 @@ authSchema.pre('save', async function ( next){
 authSchema.statics.login = async function(email, password){
     const auth = await this.findOne({email});
     if(auth){
-        const valid = bcrypt.compare(password, auth.password);
+        const valid = await bcrypt.compare(password, auth.password);
         if(valid){
             return auth;
         }

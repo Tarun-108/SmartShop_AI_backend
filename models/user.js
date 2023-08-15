@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const {isEmail} = require('validator');
 
+
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -28,7 +29,11 @@ const userSchema = new mongoose.Schema({
     phone:{
         type: String,
         required: false
-    }
+    },
+    chatFeed: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChatBoxSchema'
+    }]
 });
 
 //static method to login user
