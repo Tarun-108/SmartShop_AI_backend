@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 require("dotenv").config();
 const app = express();
+<<<<<<< HEAD
 const cors = require("cors");
 const mongoose = require('mongoose');
 const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -9,11 +10,24 @@ const authRoutes = require('./routes/auth')
 const userProfileRoutes = require('./routes/userProfile')
 const cookieParser = require('cookie-parser')
 const chalk = require("chalk");
+=======
+const mongoose = require('mongoose');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const cors = require("cors")
+
+
+const authRoutes = require('./routes/auth')
+const userProfileRoutes = require('./routes/userProfile')
+const cookieParser = require('cookie-parser')
+>>>>>>> 310fcf92aa97dc667c7ba7ea6acb0bbe18106477
 
 //middlewares
 app.use(bodyParser.json());
 app.use(cookieParser());
+<<<<<<< HEAD
 app.use(cors());
+=======
+>>>>>>> 310fcf92aa97dc667c7ba7ea6acb0bbe18106477
 
 // Server Live
 const port = process.env.LOCALPORT || 5000
@@ -32,17 +46,23 @@ mongoose.connect(process.env.DB_URI)
 
 
 //routes
+<<<<<<< HEAD
 app.use('*', (req, res, next) => {
     console.log(chalk.red(req.method), chalk.blue(req.baseUrl));
     next();
 })
 
 
+=======
+>>>>>>> 310fcf92aa97dc667c7ba7ea6acb0bbe18106477
 app.use(authRoutes)
 app.use(userProfileRoutes)
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 310fcf92aa97dc667c7ba7ea6acb0bbe18106477
 //cookies
 // app.get('/set-cookies', (req, res) => {
 //     // res.setHeader('Set-Cookie', 'newUser=true');
