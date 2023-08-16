@@ -1,13 +1,19 @@
 const Auth = require('../models/auth');
 const jwt = require('jsonwebtoken');
 const User = require("../models/user");
-const userDataShared = require("../sharedData/userDataShared");
+const userDataShared = require("../middlewares/userDataShared");
 require("dotenv").config();
 
 // handle errors
 const handleErrors = (err) => {
     console.log(err.message, err.code)
-    let errors = {email: '', password: ''};
+    let errors = {email: '', password: '', msg: ''};
+
+    errors.msg = err.message;
+
+    if(err.message.includes('timed out')){
+        errors.msg = "Slow internet connection!";
+    }
 
     // incorrect email or password
     if(err.message === 'incorrect email'){
@@ -40,7 +46,7 @@ const handleErrors = (err) => {
 
 const maxAge = 7*24*60*60;
 
-const createToke = (id, email) => {
+const createToken = (id, email) => {
     return jwt.sign({id, email}, process.env.SECRET_KEY_JWT, {
         expiresIn: maxAge
     });
@@ -51,7 +57,7 @@ module.exports.register_post = async (req, res) => {
 
     try{
         const auth = await Auth.create({email, password});
-        const token = createToke(auth._id, auth.email);
+        const token = createToken(auth._id, auth.email);
         req.body.authId = auth._id;
         const user = await userDataShared.createUser(req);
         res.status(201).json({data: {
@@ -75,8 +81,8 @@ module.exports.login_post = async (req, res) => {
     try{
         const auth = await Auth.login(email, password);
         const user = await userDataShared.getResponseData(email);
-        const token = createToke(auth._id, auth.email);
-        res.status(201).json({data: {
+        const token = createToken(auth._id, auth.email);
+        res.status(200).json({data: {
                 token: token,
                 expiresInSec: maxAge,
                 authId: auth._id,

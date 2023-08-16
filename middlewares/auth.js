@@ -2,16 +2,21 @@ const jwt = require('jsonwebtoken');
 
 // Middleware for authentication
 const authenticateJWT = (req, res, next) => {
-    const token = req.headers.authorization;
+    let token = req.headers.authorization;
     if (token) {
-        jwt.verify(token, process.env.SECRET_KEY_JWT, (err, user) => {
+        token = token.split(" ")[1];
+        jwt.verify(token, process.env.SECRET_KEY_JWT, (err, decodedToken) => {
             if (err) {
-                return res.sendStatus(403);
+                return res.status(403).send({msg: 'Invalid auth token'});
+            }else{
+                // const {id, email} = decodedToken
+                req.email = decodedToken.email;
+                next();
             }
-            req.user = user;
-            next();
         });
     } else {
-        res.sendStatus(401).json({errors: { message: "Auth token needed!"}});
+        res.status(401).send({ msg: "Auth token needed!"});
     }
 };
+
+module.exports = { authenticateJWT };
