@@ -16,13 +16,18 @@ const handleErrors = (err) => {
 
 
 module.exports.get = async (req, res) => {
-
+    const {chatBoxId} = req.body;
+    try{
+        const data = await ChatBox.findOne({_id: chatBoxId}).populate('chats');
+        res.status(200).send(data);
+    }catch (err) {
+        res.status(400).send({"msg": err.message});
+    }
 }
 
 module.exports.getAll = async (req, res) => {
     const email = req.email;
     const {user_id} = req.body;
-    console.log(user_id);
     try{
         const user = await User.findOne({_id: user_id});
         if(user){
