@@ -11,6 +11,7 @@ const ChatBoxSchema = new mongoose.Schema({
     }],
     summary: {
         type: String,
+        default: ""
     },
     images: [String],
     timeStamp: {
