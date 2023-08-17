@@ -6,7 +6,7 @@ const { authenticateJWT } = require('../middlewares/auth')
 router.post('/chat/updateTitle', authenticateJWT, chatsController.updateTitle);
 router.post('/chat/addChat', authenticateJWT, chatsController.addChat);
 router.post('/chat/addResponse', authenticateJWT, chatsController.addResponse);
-router.get('/chat/getAll', authenticateJWT, chatsController.getAll);
-router.get('/chat/get', authenticateJWT, chatsController.get);
+router.post('/chat/getAll', authenticateJWT, chatsController.getAll);
+router.post('/chat/get', authenticateJWT, chatsController.get);
 
 module.exports = router;
