@@ -32,7 +32,7 @@ module.exports.getAll = async (req, res) => {
         const user = await User.findOne({_id: user_id});
         if(user){
             const chatFeed = user.chatFeed;
-            const data = await ChatBox.find({ _id: { $in: chatFeed } }).sort({timeStamp: -1}).populate('chats').sort({timestamp: 1});
+            const data = await ChatBox.find({ _id: { $in: chatFeed } }).populate('chats');
 
             res.status(200).send({chatFeed: data});
         }else{
@@ -73,7 +73,8 @@ module.exports.updateTitle = async (req, res) => {
         reqChatBox.title = title;
         reqChatBox.timestamp = Date.now();
         await reqChatBox.save();
-        res.send(reqChatBox);
+        const data = await reqChatBox.populate('chats');
+        res.send(data);
     } catch(e){
         res.status(400).send(e.message);
     }
