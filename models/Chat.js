@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ChatSchema = new mongoose.Schema({
     sender: {
-        // 0 for AI and 1 for user/human
+        // 0 for User\Human and 1 for AI
         type: Boolean,
         required: true
     },
