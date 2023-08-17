@@ -7,7 +7,7 @@ const ChatBoxSchema = new mongoose.Schema({
     },
     chats: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ChatSchema'
+        ref: 'chat'
     }],
     features: {
         type: Object
