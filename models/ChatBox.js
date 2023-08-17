@@ -9,8 +9,8 @@ const ChatBoxSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'chat'
     }],
-    features: {
-        type: Object
+    summary: {
+        type: String,
     },
     images: [String],
     timeStamp: {
