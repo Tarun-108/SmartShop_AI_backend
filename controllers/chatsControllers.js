@@ -32,7 +32,7 @@ module.exports.getAll = async (req, res) => {
         const user = await User.findOne({_id: user_id});
         if(user){
             const chatFeed = user.chatFeed;
-            const data = await ChatBox.find({ _id: { $in: chatFeed } }).populate('chats');
+            const data = await ChatBox.find({ _id: { $in: chatFeed } }).sort({timeStamp: -1}).populate('chats').sort({timestamp: 1});
 
             res.status(200).send({chatFeed: data});
         }else{
@@ -60,24 +60,30 @@ const createBox = async ({email, title}) => {
 }
 
 module.exports.updateTitle = async (req, res) => {
-    const email = req.email;
-    let {title, chatBoxId} = req.body;
-    if(!chatBoxId){
-        chatBoxId = await createBox({email, title});
-        res.status(201);
-    }else{
-        res.status(200);
+    try{
+        const email = req.email;
+        let {title, chatBoxId} = req.body;
+        if(!chatBoxId){
+            chatBoxId = await createBox({email, title});
+            res.status(201);
+        }else{
+            res.status(200);
+        }
+        const reqChatBox = await ChatBox.findOne({_id: chatBoxId});
+        reqChatBox.title = title;
+        reqChatBox.timestamp = Date.now();
+        await reqChatBox.save();
+        res.send(reqChatBox);
+    } catch(e){
+        res.status(400).send(e.message);
     }
-    const reqChatBox = await ChatBox.findOne({_id: chatBoxId});
-    console.log(reqChatBox);
-    reqChatBox.title = title;
-    await reqChatBox.save();
-    res.send(reqChatBox);
+
+    // res.send({});
 }
 
 module.exports.addChat = async (req, res) => {
     const email = req.email;
-    let {userId, chatBoxId, user_txt: user_chat, ai_txt: ai_chat} = req.body;
+    let {userId, chatBoxId, summary, user_txt: user_chat, ai_txt: ai_chat} = req.body;
     if(!chatBoxId){
         chatBoxId = await createBox({email, title: "Untitled"});
         res.status(201);
@@ -93,8 +99,10 @@ module.exports.addChat = async (req, res) => {
         await aiChat.save();
         reqChatBox.chats.push(aiChat._id);
         reqChatBox.timestamp = Date.now();
+        reqChatBox.summary = summary;
         await reqChatBox.save();
-        res.send(reqChatBox);
+        const data = await reqChatBox.populate('chats');
+        res.send(data);
     }catch (err) {
         res.status(400).send({msg: err.message});
     }
