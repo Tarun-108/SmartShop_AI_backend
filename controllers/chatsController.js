@@ -74,7 +74,7 @@ module.exports.addChat = async (req, res) => {
     const email = req.email;
     let {userId, chatBoxId, user_txt: user_chat, ai_txt: ai_chat} = req.body;
     if(!chatBoxId){
-        chatBoxId = await createBox({email, title});
+        chatBoxId = await createBox({email, title: "Untitled"});
         res.status(201);
     }else{
         res.status(200);
