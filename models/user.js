@@ -33,7 +33,11 @@ const userSchema = new mongoose.Schema({
     chatFeed: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatBoxSchema'
-    }]
+    }],
+    embeddings: {
+        type: String,
+        default: ""
+    }
 });
 
 //static method to login user
