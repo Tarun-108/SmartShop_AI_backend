@@ -128,23 +128,29 @@ module.exports.addResponse = async (req, res) => {
 
 module.exports.generate = async (req, res) => {
     const email = req.email;
-    const {chatBoxId, user_txt: user_chat} = req.body;
-
+    let {chatBoxId, user_txt: user_chat} = req.body;
+    if(!chatBoxId){
+        chatBoxId = await createBox({email, title: "Untitled"});
+        res.status(201);
+    }else{
+        res.status(200);
+    }
     try{
         const chatBox = await ChatBox.findOne({_id: chatBoxId});
         const userChat = new Chat({sender: user_chat.sender, message: user_chat.message});
         await userChat.save();
         chatBox.chats.push(userChat._id);
         await chatBox.save();
+        const populated_chatBox = await chatBox.populate('chats');
         const user = await User.findOne({email});
         const response = await axios.post(process.env.AI_URL+"/scrapper", {
             inp: [user.embeddings, user_chat.message]
         });
         const output = {
-            ...chatBox,
+            ...populated_chatBox,
             imageList: response.data
         };
-        res.status(200).send(output);
+        res.send(output);
     }catch (err) {
         res.status(400).send(err.message);
     }
