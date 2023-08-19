@@ -141,13 +141,13 @@ module.exports.generate = async (req, res) => {
         await userChat.save();
         chatBox.chats.push(userChat._id);
         await chatBox.save();
+        const populated_chatBox = await chatBox.populate('chats');
         const user = await User.findOne({email});
-        console.log(user._id);
         const response = await axios.post(process.env.AI_URL+"/scrapper", {
             inp: [user.embeddings, user_chat.message]
         });
         const output = {
-            ...chatBox,
+            ...populated_chatBox,
             imageList: response.data
         };
         res.send(output);
