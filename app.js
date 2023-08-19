@@ -13,7 +13,8 @@ const cookieParser = require('cookie-parser')
 const chalk = require("chalk");
 
 //middlewares
-app.use(express.json({ limit: "50mb" }));
+
+app.use(express.json({limit: "50mb"}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());

@@ -147,7 +147,7 @@ module.exports.generate = async (req, res) => {
             inp: [user.embeddings, user_chat.message]
         });
         const output = {
-            ...populated_chatBox,
+            chatBox: populated_chatBox,
             imageList: response.data
         };
         res.send(output);
