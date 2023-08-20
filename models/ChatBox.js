@@ -15,11 +15,11 @@ const ChatBoxSchema = new mongoose.Schema({
     },
     images: {
         type: String,
-        default: "https://res.cloudinary.com/dauxdhnsr/image/upload/v1692447079/grid/default_grid.jpg"
+        default: ""
     },
     timeStamp: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     }
 });
 
