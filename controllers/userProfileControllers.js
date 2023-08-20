@@ -80,9 +80,7 @@ module.exports.addPurchases = async (req, res) => {
            user.purchaseList.push(elem);
            if(user.purchaseList.length > 10) user.purchaseList.shift();
         });
-        console.log(user.purchaseList);
         const response = await axios.post(process.env.AI_URL+"/update_encodings", {"inp": user.purchaseList});
-        console.log(response.data);
         user.embeddings = response.data;
         await user.save();
         res.status(200).json({msg: "user embedding updated"});
