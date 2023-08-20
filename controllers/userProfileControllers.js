@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const axios = require("axios");
 require("dotenv").config();
 
 // handle errors
@@ -63,6 +64,31 @@ module.exports.getUser_post = async (req, res) => {
     }catch (err) {
         const errors = handleErrors(err);
         res.status(400).json({errors: errors});
+    }
+
+}
+
+module.exports.addPurchases = async (req, res) => {
+    const email = req.email;
+    const {productsPurchased} = req.body;
+    try{
+        const user = await User.findOne({email});
+        if(!user.purchaseList){
+            user.purchaseList = [];
+        }
+        productsPurchased.forEach(elem => {
+           user.purchaseList.push(elem);
+           if(user.purchaseList.length > 10) user.purchaseList.shift();
+        });
+        console.log(user.purchaseList);
+        const response = await axios.post(process.env.AI_URL+"/update_encodings", {"inp": user.purchaseList});
+        console.log(response);
+        user.embeddings = response.embeddings;
+        await user.save();
+        res.status(200).json({msg: "user embedding updated"});
+    }catch (err) {
+        console.log(err.message);
+        res.status(400).json({msg: err.message});
     }
 
 }
