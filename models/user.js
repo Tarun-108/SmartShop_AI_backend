@@ -34,10 +34,8 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatBoxSchema'
     }],
-    embeddings: {
-        type: String,
-        default: ""
-    }
+    embeddings: [Number],
+    purchaseList: [String]
 });
 
 //static method to login user
