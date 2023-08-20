@@ -22,7 +22,7 @@ module.exports.getRecommended = async  (req, res) => {
     const {imageEncoding} = req.body;
     try{
         console.log(imageEncoding.length);
-        const response = await axios.post(process.env.AI_URL+'/pick', {inp: [imageEncoding]});
+        const response = await axios.post(process.env.AI_URL+'/pick', {inp: imageEncoding});
         console.log(imageEncoding.length);
         const productArray = response.data;
         const final_resp = [];
