@@ -4,13 +4,14 @@ require("dotenv").config();
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
+const chalk = require("chalk");
 
 
 const chatRoutes = require('./routes/chat')
 const authRoutes = require('./routes/auth')
 const userProfileRoutes = require('./routes/userProfile')
-const cookieParser = require('cookie-parser')
-const chalk = require("chalk");
+const productRoutes = require('./routes/products')
 
 //middlewares
 
@@ -45,3 +46,4 @@ app.use('*', (req, res, next) => {
 app.use(authRoutes)
 app.use(userProfileRoutes)
 app.use(chatRoutes)
+app.use(productRoutes)
