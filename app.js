@@ -14,6 +14,7 @@ const userProfileRoutes = require('./routes/userProfile')
 const productRoutes = require('./routes/products')
 
 //middlewares
+
 app.use(express.json({limit: "50mb"}));
 app.use(bodyParser.json());
 app.use(cookieParser());
