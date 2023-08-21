@@ -33,10 +33,9 @@ module.exports.getAll = async (req, res) => {
     if (user) {
       const chatFeed = user.chatFeed;
       const data = await ChatBox.find({ _id: { $in: chatFeed } })
-        .populate("chats")
         .sort({ timestamp: -1 })
         .limit(4);
-      console.log(data);
+      // console.log(data);
       res.status(200).send({ chatFeed: data });
     } else {
       res.status(404).send({ msg: "user not found!" });
